@@ -15,7 +15,7 @@ import {
   Camera, 
   Clapperboard, 
   MonitorPlay, 
-  Globe, 
+  Youtube, 
   Award,
   Instagram,
   Twitter,
@@ -37,6 +37,7 @@ interface Project {
   year: string;
   image: string;
   description?: string;
+  youtubeId?: string;
 }
 
 interface TeamMember {
@@ -74,7 +75,8 @@ const PROJECTS: Project[] = [
     category: "Feature Film",
     year: "2024",
     image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1000",
-    description: "A neo-noir thriller set in the ancient alleyways of Varanasi, exploring the thin line between myth and reality."
+    description: "A neo-noir thriller set in the ancient alleyways of Varanasi, exploring the thin line between myth and reality.",
+    youtubeId: "dQw4w9WgXcQ" // Placeholder ID, replace with actual
   },
   {
     id: 2,
@@ -82,7 +84,8 @@ const PROJECTS: Project[] = [
     category: "Documentary",
     year: "2023",
     image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1000",
-    description: "An intimate look at the lives of harbor workers during the great monsoon, capturing the relentless spirit of human labor."
+    description: "An intimate look at the lives of harbor workers during the great monsoon, capturing the relentless spirit of human labor.",
+    youtubeId: "dQw4w9WgXcQ"
   },
   {
     id: 3,
@@ -90,7 +93,8 @@ const PROJECTS: Project[] = [
     category: "Short Film",
     year: "2024",
     image: "https://images.unsplash.com/photo-1542204172-3c328db32155?auto=format&fit=crop&q=80&w=1000",
-    description: "A dialogue-free sensory experience exploring the profound impact of isolation on the human creative spirit."
+    description: "A dialogue-free sensory experience exploring the profound impact of isolation on the human creative spirit.",
+    youtubeId: "dQw4w9WgXcQ"
   },
   {
     id: 4,
@@ -98,7 +102,8 @@ const PROJECTS: Project[] = [
     category: "Branded Content",
     year: "2023",
     image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=80&w=1000",
-    description: "A cinematic campaign for a leading automotive brand, redefining luxury through the lens of movement and light."
+    description: "A cinematic campaign for a leading automotive brand, redefining luxury through the lens of movement and light.",
+    youtubeId: "dQw4w9WgXcQ"
   },
   {
     id: 5,
@@ -106,7 +111,8 @@ const PROJECTS: Project[] = [
     category: "Documentary",
     year: "2024",
     image: "https://images.unsplash.com/photo-1459183885447-5689510d84a9?auto=format&fit=crop&q=80&w=1000",
-    description: "Chronicling the extinction of master weaving techniques in remote mountain villages."
+    description: "Chronicling the extinction of master weaving techniques in remote mountain villages.",
+    youtubeId: "dQw4w9WgXcQ"
   },
   {
     id: 6,
@@ -114,7 +120,8 @@ const PROJECTS: Project[] = [
     category: "Feature Film",
     year: "2022",
     image: "https://images.unsplash.com/photo-1514306191717-452ec28c5814?auto=format&fit=crop&q=80&w=1000",
-    description: "A musical journey through the heart of Mumbai, where every sound tells a story of survival and success."
+    description: "A musical journey through the heart of Mumbai, where every sound tells a story of survival and success.",
+    youtubeId: "dQw4w9WgXcQ"
   }
 ];
 
@@ -204,7 +211,7 @@ const PageReveal = ({ children }: { children: React.ReactNode }) => (
   </motion.div>
 );
 
-const HomePage = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorType) => void, setCurrentPage: (p: Page) => void }) => (
+const HomePage = ({ setCursorType, setCurrentPage, onPlay }: { setCursorType: (t: CursorType) => void, setCurrentPage: (p: Page) => void, onPlay: (p: Project) => void }) => (
   <PageReveal>
     <Hero setCursorType={setCursorType} />
     <section className="py-32 bg-premium-black relative">
@@ -227,7 +234,7 @@ const HomePage = ({ setCursorType, setCurrentPage }: { setCursorType: (t: Cursor
         <SectionHeading number="03" title="Recent Works" subtitle="Portfolio" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {PROJECTS.slice(0, 4).map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} setCursorType={setCursorType} />
+            <ProjectCard key={project.id} project={project} index={i} setCursorType={setCursorType} onPlay={onPlay} />
           ))}
         </div>
       </div>
@@ -280,11 +287,13 @@ const AboutPage = () => (
               Our team consists of visionary directors, meticulous editors, and imaginative visual effects artists who work in tandem to create experiences that transcend cultural boundaries.
             </p>
           </div>
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/10">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/10">
             <img 
               src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1500" 
               alt="Studio Life" 
               className="w-full h-full object-cover grayscale"
+              loading="lazy"
+              referrerPolicy="no-referrer"
             />
           </div>
         </div>
@@ -301,7 +310,13 @@ const AboutPage = () => (
                 className="group relative"
               >
                 <div className="aspect-[3/4] rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 mb-6">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
                 <h4 className="text-xl font-serif font-bold">{member.name}</h4>
                 <p className="text-xs uppercase tracking-widest text-premium-orange font-bold mt-1">{member.role}</p>
@@ -314,7 +329,7 @@ const AboutPage = () => (
   </PageReveal>
 );
 
-const PortfolioPage = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => {
+const PortfolioPage = ({ setCursorType, onPlay }: { setCursorType: (t: CursorType) => void, onPlay: (p: Project) => void }) => {
   const [filter, setFilter] = useState('All');
   const filteredProjects = filter === 'All' ? PROJECTS : PROJECTS.filter(p => p.category.includes(filter));
 
@@ -340,7 +355,7 @@ const PortfolioPage = ({ setCursorType }: { setCursorType: (t: CursorType) => vo
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence>
               {filteredProjects.map((project, i) => (
-                <ProjectCard key={project.id} project={project} index={i} setCursorType={setCursorType} />
+                <ProjectCard key={project.id} project={project} index={i} setCursorType={setCursorType} onPlay={onPlay} />
               ))}
             </AnimatePresence>
           </motion.div>
@@ -510,7 +525,13 @@ const MediaPage = () => (
           {NEWS.map((item, i) => (
             <motion.div key={item.id} className="group cursor-pointer">
               <div className="aspect-video rounded-xl overflow-hidden mb-6 relative">
-                <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img 
+                  src={item.image} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
                 <div className="absolute top-4 left-4 px-3 py-1 bg-premium-orange text-premium-black text-[8px] font-bold uppercase tracking-widest rounded-full">
                   {item.category}
                 </div>
@@ -533,7 +554,13 @@ const ClientsPage = () => (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">
           {CLIENTS.concat(CLIENTS).concat(CLIENTS).map((client, i) => (
             <div key={i} className="bg-premium-black p-12 flex items-center justify-center grayscale hover:grayscale-0 transition-all hover:bg-white/5 group">
-              <img src={client.logo} alt={client.name} className="w-full max-w-[100px] opacity-20 group-hover:opacity-100 transition-opacity invert" />
+              <img 
+                src={client.logo} 
+                alt={client.name} 
+                className="w-full max-w-[100px] opacity-20 group-hover:opacity-100 transition-opacity invert" 
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
             </div>
           ))}
         </div>
@@ -574,7 +601,7 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
   return (
     <footer className="bg-premium-black pt-32 pb-12 border-t border-white/5">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           <div className="space-y-8">
             <div 
               className="text-3xl font-serif font-bold cursor-pointer"
@@ -586,6 +613,18 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
               A premium production house crafting bold cinema and original stories for global audiences.
             </p>
             <div className="flex gap-4">
+              <Magnetic scaling={0.5}>
+                <a 
+                  href="https://youtube.com/channel/UCwKnAd8flImld54lUP_TpBw" 
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-premium-orange hover:text-premium-orange transition-all"
+                  onMouseEnter={() => setCursorType('magnetic')}
+                  onMouseLeave={() => setCursorType('default')}
+                >
+                  <Youtube className="w-4 h-4" />
+                </a>
+              </Magnetic>
               {[Instagram, Twitter, Linkedin].map((Icon, i) => (
                 <Magnetic key={i} scaling={0.5}>
                   <a 
@@ -714,7 +753,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
     <>
       {/* Outer Ring */}
       <motion.div
-        className="fixed top-0 left-0 w-12 h-12 rounded-full border border-gold/40 pointer-events-none z-max hidden md:flex items-center justify-center mix-blend-difference will-change-transform"
+        className="fixed top-0 left-0 w-12 h-12 rounded-full border border-gold/40 pointer-events-none z-max flex items-center justify-center mix-blend-difference will-change-transform"
         style={{ x: ringX, y: ringY, translateX: '-50%', translateY: '-50%' }}
         animate={{ 
           scale: type === 'view' || type === 'play' ? 2.2 : isInteractive ? 1.5 : 1,
@@ -748,7 +787,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
       </motion.div>
 
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-gold rounded-full pointer-events-none z-max hidden md:block mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,0.8)] will-change-transform"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-gold rounded-full pointer-events-none z-max block mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,0.8)] will-change-transform"
         style={{ x: dotX, y: dotY, translateX: '-50%', translateY: '-50%' }}
         animate={{ 
           scale: isInteractive ? 0.2 : 1,
@@ -758,7 +797,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
 
       {/* Ambient Glow - Simplified for performance */}
       <motion.div
-        className="fixed top-0 left-0 w-80 h-80 pointer-events-none z-0 hidden md:block"
+        className="fixed top-0 left-0 w-80 h-80 pointer-events-none z-0 block"
         style={{ 
           x: ringX, 
           y: ringY, 
@@ -838,12 +877,12 @@ const Navbar = ({ setCursorType, setCurrentPage, currentPage }: { setCursorType:
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-lg md:text-2xl font-serif font-bold tracking-tighter cursor-pointer whitespace-nowrap"
+            className="text-xl md:text-2xl font-serif font-bold tracking-tighter cursor-pointer whitespace-nowrap"
             onMouseEnter={() => setCursorType('magnetic')}
             onMouseLeave={() => setCursorType('default')}
             onClick={() => handleLinkClick('home')}
           >
-            LAKSHAYA<span className="hidden sm:inline"> ENTERTAINMENTS</span><span className="text-gold">.</span>
+            LAKSHAYA<span> ENTERTAINMENTS</span><span className="text-gold">.</span>
           </motion.div>
         </Magnetic>
 
@@ -967,7 +1006,7 @@ const Hero = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => 
           </motion.div>
           
           <h1 
-            className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold leading-[0.9] tracking-tighter mb-8 will-change-transform uppercase"
+            className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold leading-[0.9] tracking-tighter mb-8 will-change-transform uppercase"
             onMouseEnter={() => setCursorType('text')}
             onMouseLeave={() => setCursorType('default')}
           >
@@ -1031,31 +1070,55 @@ const SectionHeading = ({ number, title, subtitle }: { number: string, title: st
       <div className="w-12 h-[1px] bg-gold/30" />
       <span className="text-white/40 uppercase tracking-[0.4em] text-[10px] font-bold">{subtitle}</span>
     </motion.div>
-    <h2 className="text-5xl md:text-7xl font-serif font-bold tracking-tight">
+    <h2 className="text-6xl md:text-7xl font-serif font-bold tracking-tight">
       {title}
     </h2>
   </div>
 );
 
-const ProjectCard = ({ project, index, setCursorType }: { project: Project, index: number, setCursorType: (t: CursorType) => void, key?: React.Key }) => {
+const ProjectCard = ({ project, index, setCursorType, onPlay }: { project: Project, index: number, setCursorType: (t: CursorType) => void, onPlay?: (p: Project) => void, key?: React.Key }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.1, duration: 0.8 }}
-      className="group relative cursor-pointer overflow-hidden aspect-[4/5] md:aspect-[3/4] rounded-xl will-change-transform translate-z-0"
-      onMouseEnter={() => setCursorType('view')}
-      onMouseLeave={() => setCursorType('default')}
+      className="group relative cursor-pointer overflow-hidden aspect-[3/4] rounded-xl will-change-transform translate-z-0"
+      onMouseEnter={() => {
+        setCursorType(project.youtubeId ? 'play' : 'view');
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setCursorType('default');
+        setIsHovered(false);
+      }}
+      onClick={() => project.youtubeId && onPlay?.(project)}
     >
+      {/* Background Video Preview on Hover */}
+      {project.youtubeId && isHovered && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+        >
+          <iframe
+            src={`https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${project.youtubeId}&rel=0&modestbranding=1&iv_load_policy=3`}
+            className="w-[400%] h-[120%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-125 opacity-40 grayscale blur-[2px]"
+            allow="autoplay"
+          />
+        </motion.div>
+      )}
+
       <img 
         src={project.image} 
         alt={project.title}
-        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0 will-change-transform"
+        className={`w-full h-full object-cover transition-all duration-1000 will-change-transform ${isHovered && project.youtubeId ? 'opacity-0' : 'opacity-100 group-hover:scale-105 grayscale group-hover:grayscale-0'}`}
         referrerPolicy="no-referrer"
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-linear-to-t from-premium-black/90 via-premium-black/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className={`absolute inset-0 bg-linear-to-t from-premium-black/90 via-premium-black/20 to-transparent transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-60'}`} />
       
       <div className="absolute inset-0 p-8 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-out">
         <div className="flex justify-between items-end">
@@ -1068,7 +1131,7 @@ const ProjectCard = ({ project, index, setCursorType }: { project: Project, inde
             className="w-12 h-12 rounded-full bg-premium-orange flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             whileHover={{ scale: 1.1 }}
           >
-            <ArrowUpRight className="w-5 h-5 text-premium-black" />
+            {project.youtubeId ? <Play className="w-5 h-5 text-premium-black fill-current" /> : <ArrowUpRight className="w-5 h-5 text-premium-black" />}
           </motion.div>
         </div>
       </div>
@@ -1083,7 +1146,7 @@ const ServicesSection = ({ setCursorType, setCurrentPage }: { setCursorType: (t:
       <div className="container mx-auto px-6 relative z-10">
         <SectionHeading number="02" title="Our Expertise" subtitle="Capabilities" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">
           {SERVICES.map((service, i) => (
             <motion.div
               key={service.title}
@@ -1124,7 +1187,7 @@ const Testimonials = () => {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-serif italic font-light leading-snug mb-12"
+            className="text-4xl md:text-5xl font-serif italic font-light leading-snug mb-12"
           >
             "Lakshaya doesn't just produce films; they create visual poetry. Their eye for detail and commitment to cinematic excellence is truly world-class."
           </motion.p>
@@ -1134,7 +1197,12 @@ const Testimonials = () => {
             className="flex flex-col items-center"
           >
             <div className="w-12 h-12 rounded-full overflow-hidden mb-4 bg-white/10">
-              <img src="https://i.pravatar.cc/150?u=1" alt="Avatar" />
+              <img 
+                src="https://i.pravatar.cc/150?u=1" 
+                alt="Avatar" 
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <h4 className="text-lg font-bold tracking-tight">Vikram Singh</h4>
             <span className="text-xs text-gold uppercase tracking-widest font-bold">Independent Director, TIFF Laureate</span>
@@ -1254,12 +1322,55 @@ const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) 
   );
 };
 
+const VideoModal = ({ project, onClose }: { project: Project | null, onClose: () => void }) => {
+  if (!project) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[1000] bg-premium-black/95 backdrop-blur-2xl flex items-center justify-center p-6 md:p-12"
+      onClick={onClose}
+    >
+      <button 
+        className="absolute top-10 right-10 text-white/40 hover:text-white transition-colors"
+        onClick={onClose}
+      >
+        <X className="w-10 h-10" />
+      </button>
+
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="w-full max-w-6xl aspect-video relative rounded-3xl overflow-hidden shadow-2xl border border-white/5 bg-black"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {project.youtubeId ? (
+          <iframe 
+            src={`https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0`}
+            title={project.title}
+            className="w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-white/20 uppercase tracking-widest font-bold">
+            No Video Link Available
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [cursorType, setCursorType] = useState<CursorType>('default');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
@@ -1268,17 +1379,17 @@ export default function App() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home': return <HomePage setCursorType={setCursorType} setCurrentPage={setCurrentPage} />;
+      case 'home': return <HomePage setCursorType={setCursorType} setCurrentPage={setCurrentPage} onPlay={setSelectedProject} />;
       case 'about': return <AboutPage />;
       case 'services': return <ServicesPage />;
-      case 'portfolio': return <PortfolioPage setCursorType={setCursorType} />;
+      case 'portfolio': return <PortfolioPage setCursorType={setCursorType} onPlay={setSelectedProject} />;
       case 'clients': return <ClientsPage />;
       case 'media': return <MediaPage />;
       case 'careers': return <CareersPage />;
       case 'contact': return <Contact setCursorType={setCursorType} />;
       case 'privacy': return <LegalPage title="Privacy Policy" />;
       case 'terms': return <LegalPage title="Terms of Service" />;
-      default: return <HomePage setCursorType={setCursorType} />;
+      default: return <HomePage setCursorType={setCursorType} setCurrentPage={setCurrentPage} onPlay={setSelectedProject} />;
     }
   };
 
@@ -1309,6 +1420,12 @@ export default function App() {
               </motion.span>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <VideoModal project={selectedProject} onClose={() => setSelectedProject(null)} />
         )}
       </AnimatePresence>
 
