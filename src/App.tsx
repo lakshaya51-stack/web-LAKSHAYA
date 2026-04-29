@@ -204,7 +204,7 @@ const PageReveal = ({ children }: { children: React.ReactNode }) => (
   </motion.div>
 );
 
-const HomePage = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => (
+const HomePage = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorType) => void, setCurrentPage: (p: Page) => void }) => (
   <PageReveal>
     <Hero setCursorType={setCursorType} />
     <section className="py-32 bg-premium-black relative">
@@ -220,7 +220,7 @@ const HomePage = ({ setCursorType }: { setCursorType: (t: CursorType) => void })
       </div>
     </section>
     
-    <ServicesSection setCursorType={setCursorType} />
+    <ServicesSection setCursorType={setCursorType} setCurrentPage={setCurrentPage} />
     
     <section className="py-32 bg-premium-black">
       <div className="container mx-auto px-6">
@@ -350,39 +350,117 @@ const PortfolioPage = ({ setCursorType }: { setCursorType: (t: CursorType) => vo
   );
 };
 
-const ServicesPage = () => (
-  <PageReveal>
-    <section className="pt-48 pb-32 bg-premium-charcoal">
-      <div className="container mx-auto px-6">
-        <SectionHeading number="01" title="Technical Artistry" subtitle="Our Craft" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {SERVICES.map((s, i) => (
-            <motion.div 
-              key={s.title}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="p-16 rounded-3xl bg-premium-black/40 border border-white/5 hover:border-premium-orange/30 transition-all group"
-            >
-              <s.icon className="w-12 h-12 text-premium-orange mb-8 group-hover:scale-110 transition-transform" />
-              <h3 className="text-3xl font-serif font-bold mb-6 italic">{s.title}</h3>
-              <p className="text-lg text-white/40 font-light leading-relaxed mb-8">
-                {s.description}
-              </p>
-              <ul className="space-y-4">
-                {['Industry Leading Tech', 'Expert Personnel', 'Global Distribution', 'Award-Winning Quality'].map(item => (
-                  <li key={item} className="flex items-center gap-3 text-xs uppercase tracking-widest font-bold text-white/20 group-hover:text-white/60 transition-colors">
-                    <ChevronRight className="w-3 h-3 text-premium-orange" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+const ServicesPage = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
+  return (
+    <PageReveal>
+      <section className="pt-48 pb-32 bg-premium-charcoal min-h-screen">
+        <div className="container mx-auto px-6">
+          <SectionHeading number="01" title="Technical Artistry" subtitle="Our Craft" />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-12">
+            {/* Tabs Sidebar */}
+            <div className="lg:col-span-4 space-y-4">
+              {SERVICES.map((s, i) => (
+                <button
+                  key={s.title}
+                  onClick={() => setActiveTab(i)}
+                  className={`w-full p-8 rounded-2xl text-left border transition-all flex items-center justify-between group ${activeTab === i ? 'bg-premium-orange border-premium-orange text-premium-black' : 'bg-white/5 border-white/5 text-white/60 hover:border-white/20'}`}
+                >
+                  <div className="flex items-center gap-4">
+                    <s.icon className={`w-6 h-6 ${activeTab === i ? 'text-premium-black' : 'text-premium-orange'}`} />
+                    <span className="text-lg font-serif font-bold italic">{s.title}</span>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 transition-transform ${activeTab === i ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
+                </button>
+              ))}
+            </div>
+
+            {/* Content Area */}
+            <div className="lg:col-span-8">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="bg-premium-black p-10 md:p-20 rounded-3xl border border-white/5 h-full"
+                >
+                  <div className="flex items-center gap-6 mb-10">
+                    <div className="w-20 h-20 rounded-2xl bg-premium-orange/10 flex items-center justify-center">
+                      {React.createElement(SERVICES[activeTab].icon, { className: "w-10 h-10 text-premium-orange" })}
+                    </div>
+                    <div>
+                      <h3 className="text-4xl font-serif font-bold mb-2 italic text-gold">{SERVICES[activeTab].title}</h3>
+                      <p className="text-xs uppercase tracking-[0.4em] font-bold text-white/30">Detailed Workflow</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-xl text-white/70 font-light leading-relaxed mb-12 italic">
+                    {SERVICES[activeTab].description}
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="space-y-6">
+                      <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-premium-orange">Key Deliverables</h4>
+                      <ul className="space-y-4">
+                        {['Strategic Planning', 'Technical Execution', 'Post-Production Sync', 'Global Distribution Ready'].map(item => (
+                          <li key={item} className="flex items-center gap-3 text-sm text-white/50">
+                            <div className="w-1.5 h-1.5 rounded-full bg-premium-orange" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="space-y-6">
+                      <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-premium-orange">Tooling & Gear</h4>
+                      <ul className="space-y-4">
+                        {['ARRI/RED Ecosystem', 'DaVinci Resolve Studio', 'Dolby Atmos Mastering', 'Proprietary VFX Pipeline'].map(item => (
+                          <li key={item} className="flex items-center gap-3 text-sm text-white/50">
+                            <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="mt-16 pt-16 border-t border-white/5 text-center md:text-left">
+                     <button className="px-10 py-4 bg-premium-orange text-premium-black rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-all text-sm">
+                        Request Consultation
+                     </button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
-  </PageReveal>
-);
+      </section>
+
+      {/* Process Section */}
+      <section className="py-32 bg-premium-black">
+        <div className="container mx-auto px-6">
+            <SectionHeading number="02" title="How We Create" subtitle="Workflow" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {[
+                { title: "Concept", desc: "Script development and visionary brainstorming.", step: "01" },
+                { title: "Pre-Prod", desc: "Casting, location scouting, and storyboarding.", step: "02" },
+                { title: "Production", desc: "Principal photography with world-class gear.", step: "03" },
+                { title: "Post-Prod", desc: "Editing, VFX, and cinematic sound design.", step: "04" }
+              ].map((p, i) => (
+                <div key={p.title} className="relative group p-8 rounded-2xl bg-white/[0.02] border border-white/5">
+                  <span className="text-6xl font-serif font-bold italic opacity-[0.03] absolute top-4 right-4 group-hover:opacity-10 transition-opacity">{p.step}</span>
+                  <h4 className="text-xl font-serif font-bold italic mb-4 text-gold">{p.title}</h4>
+                  <p className="text-sm text-white/40 leading-relaxed font-light">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+        </div>
+      </section>
+    </PageReveal>
+  );
+};
 
 const CareersPage = () => (
   <PageReveal>
@@ -998,7 +1076,7 @@ const ProjectCard = ({ project, index, setCursorType }: { project: Project, inde
   );
 };
 
-const ServicesSection = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => {
+const ServicesSection = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorType) => void, setCurrentPage: (p: Page) => void }) => {
   return (
     <section id="services" className="py-32 relative overflow-hidden bg-premium-charcoal">
        <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-premium-black to-transparent" />
@@ -1013,6 +1091,10 @@ const ServicesSection = ({ setCursorType }: { setCursorType: (t: CursorType) => 
               className="p-12 bg-premium-charcoal transition-colors group cursor-pointer"
               onMouseEnter={() => setCursorType('magnetic')}
               onMouseLeave={() => setCursorType('default')}
+              onClick={() => {
+                setCurrentPage('services');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             >
               <service.icon className="w-10 h-10 text-premium-orange mb-8 group-hover:scale-110 transition-transform" />
               <h3 className="text-xl font-serif font-bold mb-4">{service.title}</h3>
@@ -1186,7 +1268,7 @@ export default function App() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home': return <HomePage setCursorType={setCursorType} />;
+      case 'home': return <HomePage setCursorType={setCursorType} setCurrentPage={setCurrentPage} />;
       case 'about': return <AboutPage />;
       case 'services': return <ServicesPage />;
       case 'portfolio': return <PortfolioPage setCursorType={setCursorType} />;
