@@ -617,7 +617,7 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
                 <a 
                   href="https://youtube.com/channel/UCwKnAd8flImld54lUP_TpBw" 
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-premium-orange hover:text-premium-orange transition-all"
                   onMouseEnter={() => setCursorType('magnetic')}
                   onMouseLeave={() => setCursorType('default')}
@@ -627,14 +627,14 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
               </Magnetic>
               {[Instagram, Twitter, Linkedin].map((Icon, i) => (
                 <Magnetic key={i} scaling={0.5}>
-                  <a 
-                    href="#" 
+                  <button 
+                    onClick={() => {}}
                     className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-premium-orange hover:text-premium-orange transition-all"
                     onMouseEnter={() => setCursorType('magnetic')}
                     onMouseLeave={() => setCursorType('default')}
                   >
                     <Icon className="w-4 h-4" />
-                  </a>
+                  </button>
                 </Magnetic>
               ))}
             </div>
@@ -758,7 +758,8 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
         animate={{ 
           scale: type === 'view' || type === 'play' ? 2.2 : isInteractive ? 1.5 : 1,
           opacity: type === 'text' ? 0 : 1,
-          backgroundColor: type === 'view' || type === 'play' ? 'rgba(212, 175, 55, 0.1)' : 'transparent'
+          backgroundColor: type === 'view' || type === 'play' ? 'rgba(212, 175, 55, 0.1)' : 'rgba(212, 175, 55, 0)',
+          visibility: 'visible' // Default to visible, but we can refine if needed
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200, mass: 0.5 }}
       >
@@ -791,7 +792,8 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
         style={{ x: dotX, y: dotY, translateX: '-50%', translateY: '-50%' }}
         animate={{ 
           scale: isInteractive ? 0.2 : 1,
-          opacity: type === 'text' ? 0.1 : 1
+          opacity: type === 'text' ? 0.1 : 1,
+          visibility: 'visible'
         }}
       />
 
@@ -1097,24 +1099,27 @@ const ProjectCard = ({ project, index, setCursorType, onPlay }: { project: Proje
       onClick={() => project.youtubeId && onPlay?.(project)}
     >
       {/* Background Video Preview on Hover */}
-      {project.youtubeId && isHovered && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
-        >
-          <iframe
-            src={`https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${project.youtubeId}&rel=0&modestbranding=1&iv_load_policy=3`}
-            className="w-[400%] h-[120%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-125 opacity-40 grayscale blur-[2px]"
-            allow="autoplay"
-          />
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {project.youtubeId && isHovered && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-black"
+          >
+            <iframe
+              src={`https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${project.youtubeId}&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`}
+              className="w-[300%] h-[120%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-125 opacity-60 grayscale blur-[1px]"
+              allow="autoplay"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <img 
         src={project.image} 
         alt={project.title}
-        className={`w-full h-full object-cover transition-all duration-1000 will-change-transform ${isHovered && project.youtubeId ? 'opacity-0' : 'opacity-100 group-hover:scale-105 grayscale group-hover:grayscale-0'}`}
+        className={`w-full h-full object-cover transition-all duration-700 ease-in-out will-change-transform ${isHovered && project.youtubeId ? 'scale-110 opacity-0 blur-sm' : 'opacity-100 group-hover:scale-105 grayscale group-hover:grayscale-0'}`}
         referrerPolicy="no-referrer"
         loading="lazy"
       />
@@ -1261,7 +1266,13 @@ const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) 
               whileInView={{ opacity: 1, x: 0 }}
               className="glass-panel p-10 md:p-16 rounded-3xl"
             >
-              <form className="space-y-6">
+              <form 
+                className="space-y-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert("Thank you for your inquiry. Our team will get back to you shortly.");
+                }}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Name</label>
