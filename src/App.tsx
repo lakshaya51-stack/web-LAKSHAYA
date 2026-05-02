@@ -23,12 +23,13 @@ import {
   Mail,
   Phone,
   MapPin,
-  MessageSquare
+  MessageSquare,
+  User
 } from 'lucide-react';
 
 // --- Types ---
 type CursorType = 'default' | 'view' | 'play' | 'text' | 'magnetic';
-type Page = 'home' | 'about' | 'services' | 'portfolio' | 'clients' | 'media' | 'careers' | 'contact' | 'privacy' | 'terms';
+type Page = 'home' | 'about' | 'services' | 'portfolio' | 'clients' | 'media' | 'contact' | 'privacy' | 'terms';
 
 interface Project {
   id: number;
@@ -43,20 +44,12 @@ interface Project {
 interface TeamMember {
   name: string;
   role: string;
-  image: string;
+  image?: string;
 }
 
 interface Client {
   name: string;
   logo: string;
-}
-
-interface Opening {
-  id: number;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
 }
 
 interface NewsItem {
@@ -76,7 +69,7 @@ const PROJECTS: Project[] = [
     year: "2024",
     image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1000",
     description: "A neo-noir thriller set in the ancient alleyways of Varanasi, exploring the thin line between myth and reality.",
-    youtubeId: "dQw4w9WgXcQ" // Placeholder ID, replace with actual
+    youtubeId: "GD9ODkoFNO0"
   },
   {
     id: 2,
@@ -126,10 +119,15 @@ const PROJECTS: Project[] = [
 ];
 
 const TEAM: TeamMember[] = [
-  { name: "Surinder Keram", role: "Director", image: "https://i.pravatar.cc/300?u=surinder" },
-  { name: "Aryan Lakshaya", role: "Founder & Creative Director", image: "https://i.pravatar.cc/300?u=aryan" },
-  { name: "Sarah Jensen", role: "Head of Production", image: "https://i.pravatar.cc/300?u=sarah" },
-  { name: "David Chen", role: "Director of Photography", image: "https://i.pravatar.cc/300?u=david" }
+  { name: "Mr. Pavan Malu", role: "Director" },
+  { name: "Mr. Hemant Prabhu", role: "Director" },
+  { name: "Mr. Piyush Shah", role: "Writer" },
+  { name: "Mr. Amit Dua (DOP)", role: "Cameraman" },
+  { name: "Mr. Ajay Kumar", role: "Video-Editor" },
+  { name: "Mr. Prakash G. Nair", role: "Music Composer" },
+  { name: "Mr. Prince Kumar", role: "Graphic Artist & Video Editor" },
+  { name: "Mr. Vijay Tiwari", role: "Sound Engineer" },
+  { name: "Mr. Dyaneshwar", role: "Studio-Head & Archive In-Charge" }
 ];
 
 const NEWS: NewsItem[] = [
@@ -138,18 +136,23 @@ const NEWS: NewsItem[] = [
   { id: 3, title: "Collaboration with Netflix for 3-Part Docuseries", date: "March 10, 2024", category: "Project", image: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&q=80&w=800" }
 ];
 
-const OPENINGS: Opening[] = [
-  { id: 1, title: "Senior Video Editor", department: "Post-Production", location: "Mumbai / Remote", type: "Full-Time" },
-  { id: 2, title: "Creative Producer", department: "Production", location: "Mumbai", type: "Full-Time" },
-  { id: 3, title: "VFX Compositor", department: "VFX", location: "Bangalore", type: "Full-Time" },
-  { id: 4, title: "Graphic Designer", department: "Creative", location: "Remote", type: "Contract" }
-];
-
 const CLIENTS: Client[] = [
-  { name: "Netflix", logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" },
-  { name: "Prime Video", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png" },
-  { name: "Audi", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
-  { name: "Rolex", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/95/Rolex_logo.svg/1200px-Rolex_logo.svg.png" }
+  { name: "Sony", logo: "https://upload.wikimedia.org/wikipedia/commons/2/29/Sony_logo.svg" },
+  { name: "Zee", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Zee_TV_Logo.svg" },
+  { name: "Viacom18", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Viacom18_Studios_Logo.svg" },
+  { name: "Eros International", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Eros_International_logo.svg" },
+  { name: "Shemaroo", logo: "https://upload.wikimedia.org/wikipedia/commons/0/0f/Shemaroo_Logo.svg" },
+  { name: "Star TV", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Star_India_logo.svg" },
+  { name: "Reliance Entertainment", logo: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Reliance_Entertainment_Logo.svg" },
+  { name: "Balaji Telefilms", logo: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Balaji_Telefilms_logo.svg" },
+  { name: "Dharma Productions", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Dharma_Productions_Logo.svg" },
+  { name: "Mukta Arts", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Mukta_Arts_logo.svg" },
+  { name: "Vishesh Films", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Vishesh_Films_logo.svg" },
+  { name: "Filmkraft", logo: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Filmkraft_logo.svg" },
+  { name: "Doordarshan", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Doordarshan_Logo.svg" },
+  { name: "NFDC", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/NFDC_India_logo.svg" },
+  { name: "Hinduja Group", logo: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Hinduja_Group_logo.svg" },
+  { name: "Madras Talkies", logo: "https://upload.wikimedia.org/wikipedia/en/a/a2/Madras_Talkies_Logo.png" }
 ];
 
 const SERVICES = [
@@ -213,16 +216,16 @@ const PageReveal = ({ children }: { children: React.ReactNode }) => (
 
 const HomePage = ({ setCursorType, setCurrentPage, onPlay }: { setCursorType: (t: CursorType) => void, setCurrentPage: (p: Page) => void, onPlay: (p: Project) => void }) => (
   <PageReveal>
-    <Hero setCursorType={setCursorType} />
+    <Hero setCursorType={setCursorType} setCurrentPage={setCurrentPage} />
     <section className="py-32 bg-premium-black relative">
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-4xl md:text-6xl font-serif font-bold italic mb-8 max-w-4xl mx-auto">
           "Cinema is a matter of what's in the frame and what's out."
         </h2>
-        <div className="flex items-center justify-center gap-4 text-gold uppercase tracking-[0.3em] text-[10px] font-bold">
-          <div className="w-12 h-[1px] bg-gold/30" />
+        <div className="flex items-center justify-center gap-4 text-premium-orange uppercase tracking-[0.3em] text-[10px] font-bold">
+          <div className="w-12 h-[1px] bg-premium-orange/30" />
           <span>The Lakshaya Philosophy</span>
-          <div className="w-12 h-[1px] bg-gold/30" />
+          <div className="w-12 h-[1px] bg-premium-orange/30" />
         </div>
       </div>
     </section>
@@ -267,7 +270,6 @@ const HomePage = ({ setCursorType, setCurrentPage, onPlay }: { setCursorType: (t
       </div>
     </section>
 
-    <Testimonials />
     <HorizontalScrollLogos />
     <Contact setCursorType={setCursorType} />
   </PageReveal>
@@ -279,49 +281,47 @@ const AboutPage = () => (
       <div className="container mx-auto px-6">
         <SectionHeading number="01" title="Our Legacy" subtitle="Story" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          <div className="space-y-8 text-lg text-white/70 font-light leading-relaxed">
-            <p>
-              Founded in 2012, Lakshaya Entertainments has grown from a boutique post-production house to a powerhouse of cinematic storytelling. We believe that every frame matters and every story deserves to be told with uncompromising quality.
+          <div className="max-w-3xl">
+            <h3 className="text-premium-orange uppercase tracking-[0.4em] text-[10px] font-bold mb-6">Producer Profile</h3>
+            <p className="text-xl md:text-2xl font-serif italic text-white/60 mb-8 leading-relaxed">
+              Lakshaya Entertainments Pvt. Ltd. is a pioneer in <span className="text-premium-orange font-medium">Production, Marketing & Distribution</span>, led by a board of directors with a distinguished legacy in Indian cinema.
             </p>
-            <p>
-              Our team consists of visionary directors, meticulous editors, and imaginative visual effects artists who work in tandem to create experiences that transcend cultural boundaries.
-            </p>
+            <div className="space-y-8">
+              <div className="p-6 rounded-xl bg-white/[0.02] border border-white/5 relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-1 h-full bg-premium-orange opacity-50" />
+                <strong className="text-premium-orange block mb-2 uppercase tracking-[0.2em] text-[10px]">Major Achievement</strong>
+                <p className="text-lg md:text-xl font-serif text-white/80 italic">
+                  "Won a Total of <span className="text-premium-orange font-bold">15 (Fifteen)</span> National and International Awards by the company's directors."
+                </p>
+              </div>
+              <p className="text-sm text-white/40 leading-relaxed font-light">
+                Our leadership is anchored by <span className="text-premium-orange font-bold">Mr. Anwar Jamal</span> (Honry. Director), <span className="text-premium-orange font-bold">Mr. Surinder Keram</span>, and <span className="text-premium-orange font-bold">Mr. Tarun Keram</span>. Mr. Anwar Jamal alone is a <span className="text-white/70 font-medium">four-time National Film Award winner</span> and recipient of <span className="text-white/70 font-medium">eight International Awards</span> for his socially and culturally significant documentary and feature films.
+              </p>
+            </div>
           </div>
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/10">
-            <img 
-              src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1500" 
-              alt="Studio Life" 
-              className="w-full h-full object-cover grayscale"
-              loading="lazy"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        </div>
-
-        <div className="mt-32">
-          <SectionHeading number="02" title="The High Table" subtitle="Leadership" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {TEAM.map((member, i) => (
-              <motion.div 
-                key={member.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="group relative"
-              >
-                <div className="aspect-[3/4] rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 mb-6">
-                  <img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
+          <div className="glass-panel p-10 rounded-2xl border border-white/10">
+            <h3 className="text-xs uppercase tracking-[0.4em] font-bold text-premium-orange mb-8">Creative Personalities & Technicians</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12">
+              {[
+                { label: "Directors", names: ["Mr. Pavan Malu", "Mr. Hemant Prabhu"] },
+                { label: "Writer", names: ["Mr. Piyush Shah"] },
+                { label: "Cameraman", names: ["Mr. Amit Dua (DOP)"] },
+                { label: "Video-Editor", names: ["Mr. Ajay Kumar"] },
+                { label: "Music Composer", names: ["Mr. Prakash G. Nair"] },
+                { label: "Graphic Artist & Video Editor", names: ["Mr. Prince Kumar"] },
+                { label: "Sound Engineer", names: ["Mr. Vijay Tiwari"] },
+                { label: "Studio-Head & Archive In-Charge", names: ["Mr. Dyaneshwar"] }
+              ].map((item) => (
+                <div key={item.label} className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">{item.label}</span>
+                  <div className="flex flex-col">
+                    {item.names.map(name => (
+                      <span key={name} className="text-lg font-serif italic text-white/90 group-hover:text-premium-orange transition-colors duration-300">{name}</span>
+                    ))}
+                  </div>
                 </div>
-                <h4 className="text-xl font-serif font-bold">{member.name}</h4>
-                <p className="text-xs uppercase tracking-widest text-premium-orange font-bold mt-1">{member.role}</p>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -365,7 +365,7 @@ const PortfolioPage = ({ setCursorType, onPlay }: { setCursorType: (t: CursorTyp
   );
 };
 
-const ServicesPage = () => {
+const ServicesPage = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
@@ -407,7 +407,7 @@ const ServicesPage = () => {
                       {React.createElement(SERVICES[activeTab].icon, { className: "w-10 h-10 text-premium-orange" })}
                     </div>
                     <div>
-                      <h3 className="text-4xl font-serif font-bold mb-2 italic text-gold">{SERVICES[activeTab].title}</h3>
+                      <h3 className="text-4xl font-serif font-bold mb-2 italic text-premium-orange">{SERVICES[activeTab].title}</h3>
                       <p className="text-xs uppercase tracking-[0.4em] font-bold text-white/30">Detailed Workflow</p>
                     </div>
                   </div>
@@ -442,8 +442,14 @@ const ServicesPage = () => {
                   </div>
 
                   <div className="mt-16 pt-16 border-t border-white/5 text-center md:text-left">
-                     <button className="px-10 py-4 bg-premium-orange text-premium-black rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-all text-sm">
-                        Request Consultation
+                     <button 
+                       onClick={() => {
+                         setCurrentPage('portfolio');
+                         window.scrollTo({ top: 0, behavior: 'smooth' });
+                       }}
+                       className="px-10 py-4 bg-premium-orange text-premium-black rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-all text-sm"
+                     >
+                        View Projects
                      </button>
                   </div>
                 </motion.div>
@@ -466,7 +472,7 @@ const ServicesPage = () => {
               ].map((p, i) => (
                 <div key={p.title} className="relative group p-8 rounded-2xl bg-white/[0.02] border border-white/5">
                   <span className="text-6xl font-serif font-bold italic opacity-[0.03] absolute top-4 right-4 group-hover:opacity-10 transition-opacity">{p.step}</span>
-                  <h4 className="text-xl font-serif font-bold italic mb-4 text-gold">{p.title}</h4>
+                  <h4 className="text-xl font-serif font-bold italic mb-4 text-premium-orange">{p.title}</h4>
                   <p className="text-sm text-white/40 leading-relaxed font-light">{p.desc}</p>
                 </div>
               ))}
@@ -476,45 +482,6 @@ const ServicesPage = () => {
     </PageReveal>
   );
 };
-
-const CareersPage = () => (
-  <PageReveal>
-    <section className="pt-48 pb-32 bg-premium-black">
-      <div className="container mx-auto px-6">
-        <SectionHeading number="01" title="Join the Vision" subtitle="Careers" />
-        <div className="max-w-3xl mb-24">
-          <p className="text-2xl font-serif italic text-white/60">
-            We are always looking for rebels, dreamers, and master craftsmen who believe that "good enough" is the enemy of excellence.
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {OPENINGS.map((job, i) => (
-            <motion.div 
-              key={job.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="group p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-premium-orange text-white hover:text-premium-black transition-all cursor-pointer flex flex-col md:flex-row justify-between items-center gap-6"
-            >
-              <div>
-                <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-premium-orange group-hover:text-premium-black mb-2 block">{job.department}</span>
-                <h3 className="text-2xl font-serif font-bold">{job.title}</h3>
-              </div>
-              <div className="flex gap-8 text-[10px] uppercase font-bold tracking-widest opacity-60 group-hover:opacity-100 flex-shrink-0">
-                <span>{job.location}</span>
-                <span>{job.type}</span>
-              </div>
-              <div className="w-12 h-12 rounded-full border border-current flex items-center justify-center">
-                <ArrowUpRight className="w-5 h-5" />
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  </PageReveal>
-);
 
 const MediaPage = () => (
   <PageReveal>
@@ -551,16 +518,19 @@ const ClientsPage = () => (
     <section className="pt-48 pb-32 bg-premium-black">
       <div className="container mx-auto px-6">
         <SectionHeading number="01" title="Trusted Partners" subtitle="Network" />
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">
-          {CLIENTS.concat(CLIENTS).concat(CLIENTS).map((client, i) => (
-            <div key={i} className="bg-premium-black p-12 flex items-center justify-center grayscale hover:grayscale-0 transition-all hover:bg-white/5 group">
-              <img 
-                src={client.logo} 
-                alt={client.name} 
-                className="w-full max-w-[100px] opacity-20 group-hover:opacity-100 transition-opacity invert" 
-                loading="lazy"
-                referrerPolicy="no-referrer"
-              />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">
+          {CLIENTS.map((client, i) => (
+            <div key={i} className="bg-premium-black p-8 flex flex-col items-center justify-center grayscale hover:grayscale-0 transition-all hover:bg-white/5 group gap-6 min-h-[220px]">
+              <div className="w-full h-24 bg-white/5 group-hover:bg-white rounded-xl flex items-center justify-center p-6 transition-all duration-500 overflow-hidden">
+                <img 
+                  src={client.logo} 
+                  alt={client.name} 
+                  className="w-full h-full object-contain opacity-60 group-hover:opacity-100 transition-opacity" 
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 group-hover:text-premium-orange transition-colors font-bold text-center h-8 flex items-center">{client.name}</span>
             </div>
           ))}
         </div>
@@ -580,7 +550,7 @@ const LegalPage = ({ title }: { title: string }) => (
           </p>
           <h3 className="text-white font-serif text-2xl mt-12 mb-4 italic">1. Intellectual Property</h3>
           <p>
-            All content hosted on this site, including but not limited to trailers, behind-the-scenes footage, scripts, and visual concepts, remains the sole property of Lakshaya Entertainments and is protected by international copyright laws.
+            All content hosted on this site, including but not limited to trailers, behind-the-scenes footage, scripts, and visual concepts, remains the sole property of Lakshaya Entertainments Pvt. Ltd. and is protected by international copyright laws.
           </p>
           <h3 className="text-white font-serif text-2xl mt-12 mb-4 italic">2. Use of Information</h3>
           <p>
@@ -607,7 +577,7 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
               className="text-3xl font-serif font-bold cursor-pointer"
               onClick={() => handleLinkClick('home')}
             >
-              LAKSHAYA<span className="text-gold">.</span>
+              LAKSHAYA<span className="text-premium-orange">.</span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">
               A premium production house crafting bold cinema and original stories for global audiences.
@@ -643,7 +613,7 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-premium-orange mb-8">Navigation</h4>
             <div className="flex flex-col gap-4">
-              {['About', 'Services', 'Portfolio', 'Clients', 'Careers', 'Contact'].map((item) => (
+              {['About', 'Services', 'Portfolio', 'Clients', 'Contact'].map((item) => (
                 <button 
                   key={item}
                   onClick={() => handleLinkClick(item.toLowerCase() as Page)}
@@ -704,8 +674,8 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
 };
 
 const PARTNERS = [
-  "Cinelust", "Aether Films", "Nova Studios", "Lumina Works", "Spectre Media", "Vanguard Cine", 
-  "Cinelust", "Aether Films", "Nova Studios", "Lumina Works", "Spectre Media", "Vanguard Cine"
+  "Sony", "Viacom18", "Zee", "Star TV", "NFDC", "Doordarshan", 
+  "Dharma Productions", "Eros International", "Mukta Arts", "Vishesh Films", "Filmkraft", "Reliance Entertainment"
 ];
 
 const HorizontalScrollLogos = () => {
@@ -753,7 +723,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
     <>
       {/* Outer Ring */}
       <motion.div
-        className="fixed top-0 left-0 w-12 h-12 rounded-full border border-gold/40 pointer-events-none z-max flex items-center justify-center mix-blend-difference will-change-transform"
+        className="fixed top-0 left-0 w-12 h-12 rounded-full border border-gold/40 pointer-events-none z-[10000] flex items-center justify-center mix-blend-difference will-change-transform"
         style={{ x: ringX, y: ringY, translateX: '-50%', translateY: '-50%' }}
         animate={{ 
           scale: type === 'view' || type === 'play' ? 2.2 : isInteractive ? 1.5 : 1,
@@ -769,7 +739,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
-              className="text-[6px] font-bold tracking-[0.2em] text-gold uppercase text-center px-2"
+              className="text-[6px] font-bold tracking-[0.2em] text-premium-orange uppercase text-center px-2"
             >
               View Project
             </motion.span>
@@ -779,7 +749,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
-              className="text-[6px] font-bold tracking-[0.2em] text-gold uppercase text-center px-2"
+              className="text-[6px] font-bold tracking-[0.2em] text-premium-orange uppercase text-center px-2"
             >
               Play Reel
             </motion.span>
@@ -788,7 +758,7 @@ const CustomCursor = ({ type = 'default' }: { type?: CursorType }) => {
       </motion.div>
 
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-gold rounded-full pointer-events-none z-max block mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,0.8)] will-change-transform"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-gold rounded-full pointer-events-none z-[10000] block mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,0.8)] will-change-transform"
         style={{ x: dotX, y: dotY, translateX: '-50%', translateY: '-50%' }}
         animate={{ 
           scale: isInteractive ? 0.2 : 1,
@@ -862,7 +832,6 @@ const Navbar = ({ setCursorType, setCurrentPage, currentPage }: { setCursorType:
     { name: 'About', page: 'about' },
     { name: 'Services', page: 'services' },
     { name: 'Clients', page: 'clients' },
-    { name: 'Careers', page: 'careers' },
     { name: 'Contact', page: 'contact' }
   ];
 
@@ -884,7 +853,7 @@ const Navbar = ({ setCursorType, setCurrentPage, currentPage }: { setCursorType:
             onMouseLeave={() => setCursorType('default')}
             onClick={() => handleLinkClick('home')}
           >
-            LAKSHAYA<span> ENTERTAINMENTS</span><span className="text-gold">.</span>
+            LAKSHAYA<span> ENTERTAINMENTS PVT. LTD.</span><span className="text-premium-orange">.</span>
           </motion.div>
         </Magnetic>
 
@@ -938,7 +907,7 @@ const Navbar = ({ setCursorType, setCurrentPage, currentPage }: { setCursorType:
             className="fixed inset-0 bg-premium-black z-[100] flex flex-col p-12 lg:hidden"
           >
             <div className="flex justify-between items-center mb-20">
-              <div className="text-xl font-serif font-bold">LAKSHAYA<span className="text-gold">.</span></div>
+              <div className="text-xl font-serif font-bold">LAKSHAYA<span className="text-premium-orange">.</span></div>
               <button onClick={() => setIsMenuOpen(false)}><X /></button>
             </div>
             
@@ -968,7 +937,7 @@ const Navbar = ({ setCursorType, setCurrentPage, currentPage }: { setCursorType:
   );
 };
 
-const Hero = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => {
+const Hero = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorType) => void, setCurrentPage: (p: Page) => void }) => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.4]);
@@ -1003,8 +972,8 @@ const Hero = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => 
             transition={{ delay: 0.5 }}
             className="flex items-center gap-4 mb-6"
           >
-            <div className="w-12 h-[1px] bg-gold" />
-            <span className="text-gold uppercase tracking-[0.4em] text-[10px] font-bold">Premium Production House</span>
+            <div className="w-12 h-[1px] bg-premium-orange" />
+            <span className="text-premium-orange uppercase tracking-[0.4em] text-[10px] font-bold">Premium Production House</span>
           </motion.div>
           
           <h1 
@@ -1023,6 +992,10 @@ const Hero = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => 
           <div className="flex flex-wrap gap-6 items-center">
             <Magnetic scaling={0.15}>
               <button 
+                onClick={() => {
+                  setCurrentPage('portfolio');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 className="group relative flex items-center gap-3 px-8 py-4 bg-premium-orange text-premium-black rounded-full text-sm font-bold uppercase tracking-widest overflow-hidden transition-all"
                 onMouseEnter={() => setCursorType('magnetic')}
                 onMouseLeave={() => setCursorType('default')}
@@ -1030,17 +1003,6 @@ const Hero = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => 
                 <span className="relative z-10">View Our Work</span>
                 <ArrowUpRight className="w-4 h-4 relative z-10 group-hover:rotate-45 transition-transform" />
                 <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform" />
-              </button>
-            </Magnetic>
-            
-            <Magnetic scaling={0.15}>
-              <button 
-                className="group flex items-center gap-3 px-8 py-4 border border-white/20 rounded-full text-sm font-bold uppercase tracking-widest hover:border-premium-orange hover:text-premium-orange transition-all"
-                onMouseEnter={() => setCursorType('play')}
-                onMouseLeave={() => setCursorType('default')}
-              >
-                <Play className="w-4 h-4 fill-white group-hover:fill-premium-orange" />
-                <span>Watch Reel</span>
               </button>
             </Magnetic>
           </div>
@@ -1068,8 +1030,8 @@ const SectionHeading = ({ number, title, subtitle }: { number: string, title: st
       viewport={{ once: true }}
       className="flex items-center gap-4 mb-4"
     >
-      <span className="text-gold font-mono text-sm tracking-widest">{number}</span>
-      <div className="w-12 h-[1px] bg-gold/30" />
+      <span className="text-premium-orange font-mono text-sm tracking-widest">{number}</span>
+      <div className="w-12 h-[1px] bg-premium-orange/30" />
       <span className="text-white/40 uppercase tracking-[0.4em] text-[10px] font-bold">{subtitle}</span>
     </motion.div>
     <h2 className="text-6xl md:text-7xl font-serif font-bold tracking-tight">
@@ -1128,8 +1090,8 @@ const ProjectCard = ({ project, index, setCursorType, onPlay }: { project: Proje
       <div className="absolute inset-0 p-8 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-out">
         <div className="flex justify-between items-end">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-gold mb-2 block">{project.category}</span>
-            <h3 className="text-2xl md:text-3xl font-serif font-bold mb-2 group-hover:text-gold transition-colors">{project.title}</h3>
+            <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-premium-orange mb-2 block">{project.category}</span>
+            <h3 className="text-2xl md:text-3xl font-serif font-bold mb-2 group-hover:text-premium-orange transition-colors">{project.title}</h3>
             <span className="text-xs text-white/50 font-mono italic">{project.year}</span>
           </div>
           <motion.div 
@@ -1177,47 +1139,6 @@ const ServicesSection = ({ setCursorType, setCurrentPage }: { setCursorType: (t:
   );
 };
 
-const Testimonials = () => {
-  return (
-    <section className="py-32 bg-premium-black">
-      <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="flex justify-center mb-12"
-          >
-            <MessageSquare className="w-12 h-12 text-gold opacity-30" />
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-serif italic font-light leading-snug mb-12"
-          >
-            "Lakshaya doesn't just produce films; they create visual poetry. Their eye for detail and commitment to cinematic excellence is truly world-class."
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="flex flex-col items-center"
-          >
-            <div className="w-12 h-12 rounded-full overflow-hidden mb-4 bg-white/10">
-              <img 
-                src="https://i.pravatar.cc/150?u=1" 
-                alt="Avatar" 
-                loading="lazy"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <h4 className="text-lg font-bold tracking-tight">Vikram Singh</h4>
-            <span className="text-xs text-gold uppercase tracking-widest font-bold">Independent Director, TIFF Laureate</span>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) => {
   return (
     <section id="contact" className="py-32 relative">
@@ -1235,8 +1156,8 @@ const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) 
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs uppercase tracking-widest text-white/40 mb-1">Email Us</h4>
-                  <p className="text-lg font-medium">lakshaya51@gmail.com</p>
+                  <h4 className="text-xs uppercase tracking-widest text-premium-orange font-bold mb-1">Email Us</h4>
+                  <p className="text-lg font-medium text-white/90">lakshaya51@gmail.com</p>
                 </div>
               </div>
               <div className="flex gap-6 items-start group">
@@ -1244,8 +1165,19 @@ const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) 
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs uppercase tracking-widest text-white/40 mb-1">Call Studio</h4>
-                  <p className="text-lg font-medium">+91 9711187316</p>
+                  <h4 className="text-xs uppercase tracking-widest text-premium-orange font-bold mb-1">Call Studio</h4>
+                  <p className="text-lg font-medium text-white/90">+91 9711187316</p>
+                </div>
+              </div>
+              <div className="flex gap-6 items-start group">
+                <div className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-premium-orange group-hover:bg-premium-orange group-hover:text-premium-black transition-colors">
+                  <User className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase tracking-widest text-premium-orange font-bold mb-1">Head (Marketing)</h4>
+                  <p className="text-lg font-medium text-white/90">Mr. Pranab Ganguly</p>
+                  <p className="text-base text-premium-orange mt-1 tracking-wide font-medium">8447556279</p>
+                  <p className="text-sm text-white/40 italic">gangulypranab63@gmail.com</p>
                 </div>
               </div>
               <div className="flex gap-6 items-start group">
@@ -1253,8 +1185,8 @@ const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) 
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs uppercase tracking-widest text-white/40 mb-1">Studio Address</h4>
-                  <p className="text-lg font-medium">K-18, Green Park Extension, New Delhi-11016</p>
+                  <h4 className="text-xs uppercase tracking-widest text-premium-orange font-bold mb-1">Studio Address</h4>
+                  <p className="text-lg font-medium text-white/90 text-balance">K-18, Green Park Extension, New Delhi-11016</p>
                 </div>
               </div>
             </div>
@@ -1274,50 +1206,52 @@ const Contact = ({ setCursorType }: { setCursorType: (t: CursorType) => void }) 
                 }}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Name</label>
+                  <div className="space-y-2 group">
+                    <label className="text-[10px] uppercase font-bold tracking-widest text-white/40 group-focus-within:text-premium-orange transition-colors">Name</label>
                     <input 
                       type="text" 
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-colors" 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-premium-orange transition-colors text-white" 
                       onFocus={() => setCursorType('text')}
                       onBlur={() => setCursorType('default')}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Email</label>
+                  <div className="space-y-2 group">
+                    <label className="text-[10px] uppercase font-bold tracking-widest text-white/40 group-focus-within:text-premium-orange transition-colors">Email</label>
                     <input 
                       type="email" 
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-colors" 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-premium-orange transition-colors text-white" 
                       onFocus={() => setCursorType('text')}
                       onBlur={() => setCursorType('default')}
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Project Type</label>
+                <div className="space-y-2 group">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-white/40 group-focus-within:text-premium-orange transition-colors">Project Type</label>
                   <select 
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-colors appearance-none outline-none cursor-pointer"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-premium-orange transition-colors appearance-none outline-none cursor-pointer text-white"
                     onMouseEnter={() => setCursorType('magnetic')}
                     onMouseLeave={() => setCursorType('default')}
                   >
-                    <option>Feature Film</option>
-                    <option>Documentary</option>
-                    <option>Branded Content</option>
-                    <option>Distribution</option>
+                    <option className="bg-premium-black">Feature Film</option>
+                    <option className="bg-premium-black">Short Films</option>
+                    <option className="bg-premium-black">Nukar Natak</option>
+                    <option className="bg-premium-black">Documentary</option>
+                    <option className="bg-premium-black">Branded Content</option>
+                    <option className="bg-premium-black">Distribution</option>
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Message</label>
+                <div className="space-y-2 group">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-white/40 group-focus-within:text-premium-orange transition-colors">Message</label>
                   <textarea 
                     rows={4} 
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-colors resize-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-premium-orange transition-colors resize-none text-white"
                     onFocus={() => setCursorType('text')}
                     onBlur={() => setCursorType('default')}
                   ></textarea>
                 </div>
                 <Magnetic scaling={0.1}>
                   <button 
-                    className="w-full py-4 bg-premium-orange text-premium-black rounded-full font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all"
+                    className="w-full py-4 bg-premium-orange text-premium-black rounded-full font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,107,44,0.2)] transition-all"
                     onMouseEnter={() => setCursorType('magnetic')}
                     onMouseLeave={() => setCursorType('default')}
                   >
@@ -1392,11 +1326,10 @@ export default function App() {
     switch (currentPage) {
       case 'home': return <HomePage setCursorType={setCursorType} setCurrentPage={setCurrentPage} onPlay={setSelectedProject} />;
       case 'about': return <AboutPage />;
-      case 'services': return <ServicesPage />;
+      case 'services': return <ServicesPage setCurrentPage={setCurrentPage} />;
       case 'portfolio': return <PortfolioPage setCursorType={setCursorType} onPlay={setSelectedProject} />;
       case 'clients': return <ClientsPage />;
       case 'media': return <MediaPage />;
-      case 'careers': return <CareersPage />;
       case 'contact': return <Contact setCursorType={setCursorType} />;
       case 'privacy': return <LegalPage title="Privacy Policy" />;
       case 'terms': return <LegalPage title="Terms of Service" />;
@@ -1427,7 +1360,7 @@ export default function App() {
                 transition={{ delay: 0.5 }}
                 className="text-[10px] tracking-[0.8em] text-white/40 uppercase font-bold"
               >
-                LAKSHAYA ENTERTAINMENTS
+                LAKSHAYA ENTERTAINMENTS PVT. LTD.
               </motion.span>
             </div>
           </motion.div>
@@ -1440,9 +1373,8 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <CustomCursor type={cursorType} />
       <Navbar setCursorType={setCursorType} setCurrentPage={setCurrentPage} currentPage={currentPage} />
-      
+
       <main className={loading ? 'hidden' : 'block'}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -1457,6 +1389,8 @@ export default function App() {
         </AnimatePresence>
         <Footer setCursorType={setCursorType} setCurrentPage={setCurrentPage} />
       </main>
+
+      <CustomCursor type={cursorType} />
     </div>
   );
 }
