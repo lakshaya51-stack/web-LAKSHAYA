@@ -231,17 +231,6 @@ const HomePage = ({ setCursorType, setCurrentPage, onPlay }: { setCursorType: (t
     </section>
     
     <ServicesSection setCursorType={setCursorType} setCurrentPage={setCurrentPage} />
-    
-    <section className="py-32 bg-premium-black">
-      <div className="container mx-auto px-6">
-        <SectionHeading number="03" title="Recent Works" subtitle="Portfolio" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {PROJECTS.slice(0, 4).map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} setCursorType={setCursorType} onPlay={onPlay} />
-          ))}
-        </div>
-      </div>
-    </section>
 
     <section className="h-[70vh] relative overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 z-0 will-change-transform translate-z-0">
@@ -329,41 +318,6 @@ const AboutPage = () => (
   </PageReveal>
 );
 
-const PortfolioPage = ({ setCursorType, onPlay }: { setCursorType: (t: CursorType) => void, onPlay: (p: Project) => void }) => {
-  const [filter, setFilter] = useState('All');
-  const filteredProjects = filter === 'All' ? PROJECTS : PROJECTS.filter(p => p.category.includes(filter));
-
-  return (
-    <PageReveal>
-      <section className="pt-48 pb-32 bg-premium-black min-h-screen">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-            <SectionHeading number="01" title="The Archive" subtitle="Portfolio" />
-            <div className="flex flex-wrap gap-4 mb-24">
-              {['All', 'Film', 'Documentary', 'Branded'].map(cat => (
-                <button 
-                  key={cat} 
-                  onClick={() => setFilter(cat)}
-                  className={`px-8 py-3 rounded-full border transition-all text-[10px] uppercase font-bold tracking-widest ${filter === cat ? 'bg-premium-orange border-premium-orange text-premium-black' : 'border-white/10 text-white/50 hover:border-white hover:text-white'}`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <AnimatePresence>
-              {filteredProjects.map((project, i) => (
-                <ProjectCard key={project.id} project={project} index={i} setCursorType={setCursorType} onPlay={onPlay} />
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-      </section>
-    </PageReveal>
-  );
-};
 
 const ServicesPage = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -444,12 +398,12 @@ const ServicesPage = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void })
                   <div className="mt-16 pt-16 border-t border-white/5 text-center md:text-left">
                      <button 
                        onClick={() => {
-                         setCurrentPage('portfolio');
+                         setCurrentPage('contact');
                          window.scrollTo({ top: 0, behavior: 'smooth' });
                        }}
                        className="px-10 py-4 bg-premium-orange text-premium-black rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-all text-sm"
                      >
-                        View Projects
+                        Contact Us
                      </button>
                   </div>
                 </motion.div>
@@ -613,7 +567,7 @@ const Footer = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorTy
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-premium-orange mb-8">Navigation</h4>
             <div className="flex flex-col gap-4">
-              {['About', 'Services', 'Portfolio', 'Clients', 'Contact'].map((item) => (
+              {['About', 'Services', 'Clients', 'Contact'].map((item) => (
                 <button 
                   key={item}
                   onClick={() => handleLinkClick(item.toLowerCase() as Page)}
@@ -828,7 +782,6 @@ const Navbar = ({ setCursorType, setCurrentPage, currentPage }: { setCursorType:
 
   const navLinks: { name: string, page: Page }[] = [
     { name: 'Home', page: 'home' },
-    { name: 'Portfolio', page: 'portfolio' },
     { name: 'About', page: 'about' },
     { name: 'Services', page: 'services' },
     { name: 'Clients', page: 'clients' },
@@ -993,14 +946,14 @@ const Hero = ({ setCursorType, setCurrentPage }: { setCursorType: (t: CursorType
             <Magnetic scaling={0.15}>
               <button 
                 onClick={() => {
-                  setCurrentPage('portfolio');
+                  setCurrentPage('services');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 className="group relative flex items-center gap-3 px-8 py-4 bg-premium-orange text-premium-black rounded-full text-sm font-bold uppercase tracking-widest overflow-hidden transition-all"
                 onMouseEnter={() => setCursorType('magnetic')}
                 onMouseLeave={() => setCursorType('default')}
               >
-                <span className="relative z-10">View Our Work</span>
+                <span className="relative z-10">Explore Services</span>
                 <ArrowUpRight className="w-4 h-4 relative z-10 group-hover:rotate-45 transition-transform" />
                 <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform" />
               </button>
@@ -1327,7 +1280,6 @@ export default function App() {
       case 'home': return <HomePage setCursorType={setCursorType} setCurrentPage={setCurrentPage} onPlay={setSelectedProject} />;
       case 'about': return <AboutPage />;
       case 'services': return <ServicesPage setCurrentPage={setCurrentPage} />;
-      case 'portfolio': return <PortfolioPage setCursorType={setCursorType} onPlay={setSelectedProject} />;
       case 'clients': return <ClientsPage />;
       case 'media': return <MediaPage />;
       case 'contact': return <Contact setCursorType={setCursorType} />;
